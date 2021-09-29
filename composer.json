@@ -1,0 +1,19 @@
+{
+    "name": "sahin/cms",
+    "description": "Phpbasics cms projesi.",
+    "autoload": {
+        "psr-4": {
+            "App\\": "./App",
+            "Core\\": "./Core"
+        }
+    },
+    "authors": [
+        {
+            "name": "Şahin ERSEVER",
+            "email": "ersversahint@gmail.com"
+        }
+    ],
+    "require": {
+        "bramus/router": "~1.6"
+    }
+}
