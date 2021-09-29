@@ -8,7 +8,8 @@ class Database
 
     public function __construct()
     {
-        $this->connect = new \PDO('mysql:host=localhost;dbname=todoapp', 'root','root');
+
+        $this->connect = new \PDO('mysql:host='.HOST.';dbname='.DB.';', DB_USER,DB_PASSWORD);
     }
 
     public function query($sql,$multi = false)
