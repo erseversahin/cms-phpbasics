@@ -37,7 +37,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="<?= _link('') ?>">Keşfet</a></li>
-                            <li class="breadcrumb-item active">Müşteriler</li>
+                            <li class="breadcrumb-item"><a href="<?= _link('musteri') ?>">Müşteri</a></li>
+                            <li class="breadcrumb-item active">Ekle</li>
                         </ol>
                     </div><!-- /.col -->
                 </div><!-- /.row -->
@@ -47,37 +48,49 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
         <!-- Main content -->
         <div class="content">
-            <table class="table table-bordered">
-                <thead>
-                <tr>
-                    <th>Müşteriler</th>
-                    <th>Projeleri</th>
-                    <th style="width: 40px">Eylem</th>
-                </tr>
-                </thead>
-                <tbody>
-                <?php foreach ($data['customers'] as $key => $value): ?>
-                <tr id="row_<?= $value['id'] ?>">
-                    <td><?= $value['name']. ' '. $value['surname'] ?></td>
-                    <td>
-                        <div class="progress progress-xs">
-                            <div class="progress-bar progress-bar-danger" style="width: 55%"></div>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="btn-group btn-group-sm">
-                            <button onclick="removeCustomer('<?= $value['id'] ?>')" class="btn btn-sm btn-danger">Sil</button>
-                            <a href="<?= _link('musteri/guncelle/'.$value['id']) ?>" class="btn btn-sm btn-info">Güncelle</a>
-                        </div>
-                    </td>
-                </tr>
-                <?php endforeach; ?>
-                </tbody>
-            </table>
+            <form id="customer">
+                <input type="hidden" id="customer_id" value="<?= $data['customer']['id'] ?? ''; ?>">
+                <div class="card-body">
+                    <div class="form-group">
+                        <label for="customer_name">Müşteri Adı</label>
+                        <input type="text" class="form-control" id="customer_name" value="<?= $data['customer']['name'] ?? ''; ?>">
+                    </div>
+                    <div class="form-group">
+                        <label for="customer_surname">Müşteri Soyadı</label>
+                        <input type="text" class="form-control" id="customer_surname" value="<?= $data['customer']['surname'] ?? ''; ?>">
+                    </div>
+                    <div class="form-group">
+                        <label for="customer_company">Firma Adı</label>
+                        <input type="text" class="form-control" id="customer_company" value="<?= $data['customer']['company'] ?? ''; ?>">
+                    </div>
+                    <div class="form-group">
+                        <label for="customer_phone">Sabit Telefon</label>
+                        <input type="text" class="form-control" id="customer_phone" value="<?= $data['customer']['phone'] ?? ''; ?>">
+                    </div>
+                    <div class="form-group">
+                        <label for="customer_gsm">GSM</label>
+                        <input type="text" class="form-control" id="customer_gsm" value="<?= $data['customer']['gsm'] ?? ''; ?>">
+                    </div>
+                    <div class="form-group">
+                        <label for="customer_email">E-Posta</label>
+                        <input type="text" class="form-control" id="customer_email" value="<?= $data['customer']['email'] ?? ''; ?>">
+                    </div>
+                    <div class="form-group">
+                        <label for="customer_address">Adress</label>
+                        <textarea class="form-control" id="customer_address"><?= $data['customer']['address'] ?? ''; ?></textarea>
+                    </div>
+                </div>
+                <!-- /.card-body -->
+
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-primary">Güncelle</button>
+                </div>
+            </form>
         </div>
         <!-- /.content -->
     </div>
     <!-- /.content-wrapper -->
+
 
     <!-- Main Footer -->
     <footer class="main-footer">
@@ -103,17 +116,35 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script src="<?= assets('js/adminlte.min.js') ?>"></script>
 
 <script>
-    function removeCustomer(id){
-        let customer_id = id;
+
+    const customer = document.getElementById('customer');
+
+    customer.addEventListener('submit', (e) => {
+        let customer_id = document.getElementById('customer_id').value;
+        let customer_name = document.getElementById('customer_name').value;
+        let customer_surname = document.getElementById('customer_surname').value;
+        let customer_company = document.getElementById('customer_company').value;
+        let customer_phone = document.getElementById('customer_phone').value;
+        let customer_gsm = document.getElementById('customer_gsm').value;
+        let customer_email = document.getElementById('customer_email').value;
+        let customer_address = document.getElementById('customer_address').value;
 
         let formData = new FormData();
         formData.append('customer_id',customer_id);
+        formData.append('customer_name',customer_name);
+        formData.append('customer_surname',customer_surname);
+        formData.append('customer_company',customer_company);
+        formData.append('customer_phone',customer_phone);
+        formData.append('customer_gsm',customer_gsm);
+        formData.append('customer_email',customer_email);
+        formData.append('customer_address',customer_address);
 
-        axios.post('<?= _link('musteri/sil') ?>', formData)
+
+        axios.post('<?= _link('musteri/guncelle') ?>', formData)
             .then(res => {
                 console.log(res)
-                if (res.data.removed){
-                    document.getElementById('row_'+ res.data.removed).remove();
+                if (res.data.redirect){
+                    window.location.href = res.data.redirect;
                 }
                 Swal.fire(
                     res.data.title,
@@ -124,37 +155,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
             })
             .catch((err) => { console.log(err) })
-    }
-    const customer = document.getElementById('customer');
-
-    customer.addEventListener('submit', (e) => {
-
-        let customer_name = document.getElementById('customer_name').value;
-        let customer_surname = document.getElementById('customer_surname').value;
-        let customer_company = document.getElementById('customer_company').value;
-        let customer_phone = document.getElementById('customer_phone').value;
-        let customer_gsm = document.getElementById('customer_gsm').value;
-        let customer_email = document.getElementById('customer_email').value;
-        let customer_address = document.getElementById('customer_address').value;
-
-
-        formData.append('customer_name',customer_name);
-        formData.append('customer_surname',customer_surname);
-        formData.append('customer_company',customer_company);
-        formData.append('customer_phone',customer_phone);
-        formData.append('customer_gsm',customer_gsm);
-        formData.append('customer_email',customer_email);
-        formData.append('customer_address',customer_address);
-
-
-
 
 
         e.preventDefault();
     });
 
 </script>
-
-
 </body>
 </html>

@@ -19,9 +19,26 @@ class Auth extends BaseController
     {
         $data = $this->request->post();
 
+
+
+        if (!$data['email']){
+            $status = 'error';
+            $title = 'Ops! Dikkat';
+            $msg = 'E-Posta adresinizi giriniz.';
+            echo json_encode(['status' => $status, 'title' => $title, 'msg' => $msg]);
+            exit();
+        }
+
+        if (!$data['password']){
+            $status = 'error';
+            $title = 'Ops! Dikkat';
+            $msg = 'Şifrenizi adresinizi giriniz.';
+            echo json_encode(['status' => $status, 'title' => $title, 'msg' => $msg]);
+            exit();
+        }
+
         $AuthModel = new ModelAuth();
         $access = $AuthModel->userLogin($data);
-
         if ($access){
             $status = 'success';
             $title = 'İşlem Başarılı';

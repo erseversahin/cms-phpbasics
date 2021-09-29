@@ -19,7 +19,11 @@ $cms->router->mount('/musteri', function() use ($cms) {
 
     $cms->router->get('/', 'Controllers\Customer@Index');
     $cms->router->get('/ekle', 'Controllers\Customer@Add');
+    $cms->router->post('/ekle', 'Controllers\Customer@CreateCustomer');
     $cms->router->get('/guncelle/([0-9]+)', 'Controllers\Customer@Edit');
+
+    $cms->router->post('/guncelle', 'Controllers\Customer@EditCustomer');
+    $cms->router->post('/sil', 'Controllers\Customer@RemoveCustomer');
 
 });
 $cms->router->mount('/proje', function() use ($cms) {
