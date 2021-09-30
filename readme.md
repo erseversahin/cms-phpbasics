@@ -1,7 +1,9 @@
 ### CMS Projesi - (Patika-PhpBasics)
 PHPBasics Müşteri Yönetim Sistemi Projesi
 
-##### Yapılacaklar
+![img.png](img.png)
+
+##### Neler Yaptık?
 
 - [x] Composer PSR4 Autoload Sistemi
 - [x] OOP MVC Çatısı 
@@ -14,10 +16,10 @@ PHPBasics Müşteri Yönetim Sistemi Projesi
 - [x] Yardımcı Fonksiyonların Dahil Edilmesi
 - [x] Veritabanı Hazırlanması
 
-##### Özellikler
+##### Program Özellikleri
 
 - [x] Oturum Yönetimi
 - [x] Müşteri İşlemleri
 - [x] Proje İşlemleri
-- [ ] Profil İşlemleri
-- [ ] İstatistikler
+- [X] Profil İşlemleri
+- [X] İstatistikler

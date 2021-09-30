@@ -50,7 +50,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <div class="col-md-4 col-sm-6 col-12">
                         <div class="info-box">
                             <span class="info-box-icon bg-info"><i class="fa fa-users"></i></span>
-
                             <div class="info-box-content">
                                 <span class="info-box-text">Toplam Müşteri</span>
                                 <span class="info-box-number"><?= $data['totals']['total_customer'] ?? 0 ?></span>
@@ -189,10 +188,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <footer class="main-footer">
         <!-- To the right -->
         <div class="float-right d-none d-sm-inline">
-            Anything you want
+            Patika.Dev - PhpBasics
         </div>
         <!-- Default to the left -->
-        <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All rights reserved.
+        We <strong><i class="fa fa-heart"></i></strong> PHP
     </footer>
 </div>
 <!-- ./wrapper -->
