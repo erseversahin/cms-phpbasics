@@ -11,12 +11,13 @@ PHPBasics Müşteri Yönetim Sistemi Projesi
 - [x] Controller Hazırlanması
 - [x] Model Hazırlanması
 - [x] View Hazırlanması
-- [ ] Yardımcı Fonksiyonların Dahil Edilmesi
-- [ ] Veritabanı Hazırlanması
+- [x] Yardımcı Fonksiyonların Dahil Edilmesi
+- [x] Veritabanı Hazırlanması
 
 ##### Özellikler
 
-- [ ] Oturum Yönetimi
-- [ ] Müşteri İşlemleri
-- [ ] Proje İşlemleri
+- [x] Oturum Yönetimi
+- [x] Müşteri İşlemleri
+- [x] Proje İşlemleri
+- [ ] Profil İşlemleri
 - [ ] İstatistikler
