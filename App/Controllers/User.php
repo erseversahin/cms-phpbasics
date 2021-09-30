@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Model\ModelUser;
 use Core\BaseController;
 use Core\Session;
 
@@ -9,27 +10,21 @@ class User extends BaseController
 {
 
 
-    public function showProfile($id)
+    public function Index()
     {
+        $data['navbar'] = $this->view->load('static/navbar');
+        $data['sidebar'] = $this->view->load('static/sidebar');
+        $data['user'] = Session::getAllSession();
 
-        //$users = $this->db->connect->query("SELECT * FROM users WHERE users.id = '$id' ")->fetch(\PDO::FETCH_ASSOC);
-        $users = $this->db->query("SELECT * FROM users WHERE users.id = '$id' ");
-        print_r($users);
-    }
-
-    public function Test()
-    {
-
-        $this->view->load('test', ['isim' => 'Şahin']);
+        echo $this->view->load('user/index',compact('data'));
 
     }
+    public function EditProfile()
+    {
 
-    public function getTest(){
-
-        $get = $this->request->post();
-        print_r($get);
-
-
+    }
+    public function ChangePassword()
+    {
 
     }
 

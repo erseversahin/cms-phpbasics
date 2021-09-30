@@ -15,6 +15,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <link rel="stylesheet" href="<?= assets('plugins/fontawesome-free/css/all.min.css') ?>">
     <!-- Theme style -->
     <link rel="stylesheet" href="<?= assets('css/adminlte.min.css') ?>">
+    <link rel="stylesheet" href="<?= assets('plugins/summernote/summernote.min.css') ?>">
 </head>
 <body class="hold-transition sidebar-mini">
 <div class="wrapper">
@@ -65,17 +66,17 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                    </a>
                                </li>
                                <li class="nav-item">
-                                   <a href="#" class="nav-link">
+                                   <a href="tel:<?= $data['customer']['phone'] ?>" class="nav-link">
                                        <?= $data['customer']['phone'] ?>
                                    </a>
                                </li>
                                <li class="nav-item">
-                                   <a href="#" class="nav-link">
+                                   <a href="tel:<?= $data['customer']['gsm'] ?>" class="nav-link">
                                        <?= $data['customer']['gsm'] ?>
                                    </a>
                                </li>
                                <li class="nav-item">
-                                   <a href="#" class="nav-link">
+                                   <a href="mailto:<?= $data['customer']['email'] ?>" class="nav-link">
                                        <?= $data['customer']['email'] ?>
                                    </a>
                                </li>
@@ -85,40 +86,46 @@ scratch. This page gets rid of all links and provides the needed markup only.
                </div>
 
                <div class="col-md-8">
-                   <table class="table table-bordered">
-                       <thead>
-                       <tr>
-                           <th>Proje</th>
-                           <th>Durum</th>
-                           <th>İlerleyiş</th>
-                           <th style="width: 40px">Eylem</th>
-                       </tr>
-                       </thead>
-                       <tbody>
-                       <?php foreach ($data['projects'] as $key => $value): ?>
-                           <tr id="row_<?= $value['id'] ?>">
-                               <td><?= $value['title']; ?></td>
-                               <td><?= $value['status'] == 'a' ? 'Aktif' : 'Pasif'; ?></td>
-                               <td>
-                                   <?= $value['progress']; ?>%
-                                   <div class="progress progress-xs">
-                                       <div class="progress-bar progress-bar-danger" style="width: <?= $value['progress']; ?>%"></div>
-                                   </div>
-                               </td>
-                               <td>
-                                   <div class="btn-group btn-group-sm">
-                                       <button onclick="confirm('<?= $value['id'] ?>')" class="btn btn-sm btn-danger">Sil</button>
-                                       <a href="<?= _link('proje/guncelle/'.$value['id']) ?>" class="btn btn-sm btn-info">Güncelle</a>
-                                   </div>
-                               </td>
-                           </tr>
-                       <?php endforeach; ?>
-                       </tbody>
-                   </table>
-
+                   <textarea id="summernote"><?= htmlspecialchars_decode($data['customer']['notes']) ?></textarea>
+                   <button style="width: 100%" class="btn btn-sm btn-dark" onclick="saveNote()">Kaydet</button>
                </div>
 
            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th>Proje</th>
+                            <th>Durum</th>
+                            <th>İlerleyiş</th>
+                            <th style="width: 40px">Eylem</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <?php foreach ($data['projects'] as $key => $value): ?>
+                            <tr id="row_<?= $value['id'] ?>">
+                                <td><?= $value['title']; ?></td>
+                                <td><?= $value['status'] == 'a' ? 'Aktif' : 'Pasif'; ?></td>
+                                <td>
+                                    <?= $value['progress']; ?>%
+                                    <div class="progress progress-xs">
+                                        <div class="progress-bar progress-bar-danger" style="width: <?= $value['progress']; ?>%"></div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="btn-group btn-group-sm">
+                                        <button onclick="confirm('<?= $value['id'] ?>')" class="btn btn-sm btn-danger">Sil</button>
+                                        <a href="<?= _link('proje/guncelle/'.$value['id']) ?>" class="btn btn-sm btn-info">Güncelle</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
         </div>
         <!-- /.content -->
     </div>
@@ -145,40 +152,41 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script src="<?= assets('plugins/bootstrap/js/bootstrap.bundle.min.js') ?>"></script>
 <!-- AdminLTE App -->
 <script src="<?= assets('plugins/sweetalert2/sweetalert2.all.js') ?>"></script>
+<script src="<?= assets('plugins/summernote/summernote.min.js') ?>"></script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.4/axios.min.js" integrity="sha512-lTLt+W7MrmDfKam+r3D2LURu0F47a3QaW5nF0c6Hl0JDZ57ruei+ovbg7BrZ+0bjVJ5YgzsAWE+RreERbpPE1g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="<?= assets('js/adminlte.min.js') ?>"></script>
-
 <script>
+    $(function (){
+        $('#summernote').summernote({
+            height: 183,
+            toolbar: [
 
-    const customer = document.getElementById('customer');
 
-    customer.addEventListener('submit', (e) => {
-        let customer_id = document.getElementById('customer_id').value;
-        let customer_name = document.getElementById('customer_name').value;
-        let customer_surname = document.getElementById('customer_surname').value;
-        let customer_company = document.getElementById('customer_company').value;
-        let customer_phone = document.getElementById('customer_phone').value;
-        let customer_gsm = document.getElementById('customer_gsm').value;
-        let customer_email = document.getElementById('customer_email').value;
-        let customer_address = document.getElementById('customer_address').value;
+
+                ['font', ['bold', 'underline', 'clear']],
+
+                ['color', ['color']],
+
+                ['para', ['ul', 'ol', 'paragraph']],
+
+                ['table', ['table']],
+
+                ['insert', ['link']],
+
+
+            ],
+            placeholder: 'Müşterileriniz ile ilgili notlar alın...',
+        });
+    })
+
+    function saveNote(){
+        const html = $('#summernote').summernote('code');
 
         let formData = new FormData();
-        formData.append('customer_id',customer_id);
-        formData.append('customer_name',customer_name);
-        formData.append('customer_surname',customer_surname);
-        formData.append('customer_company',customer_company);
-        formData.append('customer_phone',customer_phone);
-        formData.append('customer_gsm',customer_gsm);
-        formData.append('customer_email',customer_email);
-        formData.append('customer_address',customer_address);
-
-
-        axios.post('<?= _link('musteri/guncelle') ?>', formData)
+        formData.append('html',html);
+        axios.post('<?= _link('musteri/not/'.$data['customer']['id']) ?>', formData)
             .then(res => {
-                console.log(res)
-                if (res.data.redirect){
-                    window.location.href = res.data.redirect;
-                }
                 Swal.fire(
                     res.data.title,
                     res.data.msg,
@@ -190,8 +198,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
             .catch((err) => { console.log(err) })
 
 
-        e.preventDefault();
-    });
+    }
+
 
 </script>
 </body>
