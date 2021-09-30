@@ -36,8 +36,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     </div><!-- /.col -->
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="#">Home</a></li>
-                            <li class="breadcrumb-item active">Starter Page</li>
+                            <li class="breadcrumb-item"><a href="<?= _link('') ?>">Keşfet</a></li>
+                            <li class="breadcrumb-item active">Projeler</li>
                         </ol>
                     </div><!-- /.col -->
                 </div><!-- /.row -->
@@ -47,26 +47,40 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
         <!-- Main content -->
         <div class="content">
-            <div class="container-fluid">
-                <div class="row">
-
-                </div>
-                <!-- /.row -->
-            </div><!-- /.container-fluid -->
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>Proje</th>
+                    <th>Durum</th>
+                    <th>İlerleyiş</th>
+                    <th style="width: 40px">Eylem</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php foreach ($data['projects'] as $key => $value): ?>
+                <tr id="row_<?= $value['id'] ?>">
+                    <td><?= $value['title']; ?></td>
+                    <td><?= $value['status'] == 'a' ? 'Aktif' : 'Pasif'; ?></td>
+                    <td>
+                        <?= $value['progress']; ?>%
+                        <div class="progress progress-xs">
+                            <div class="progress-bar progress-bar-danger" style="width: <?= $value['progress']; ?>%"></div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="btn-group btn-group-sm">
+                            <button onclick="confirm('<?= $value['id'] ?>')" class="btn btn-sm btn-danger">Sil</button>
+                            <a href="<?= _link('proje/guncelle/'.$value['id']) ?>" class="btn btn-sm btn-info">Güncelle</a>
+                        </div>
+                    </td>
+                </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
         </div>
         <!-- /.content -->
     </div>
     <!-- /.content-wrapper -->
-
-    <!-- Control Sidebar -->
-    <aside class="control-sidebar control-sidebar-dark">
-        <!-- Control sidebar content goes here -->
-        <div class="p-3">
-            <h5>Title</h5>
-            <p>Sidebar content</p>
-        </div>
-    </aside>
-    <!-- /.control-sidebar -->
 
     <!-- Main Footer -->
     <footer class="main-footer">
@@ -87,6 +101,56 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <!-- Bootstrap 4 -->
 <script src="<?= assets('plugins/bootstrap/js/bootstrap.bundle.min.js') ?>"></script>
 <!-- AdminLTE App -->
+<script src="<?= assets('plugins/sweetalert2/sweetalert2.all.js') ?>"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.4/axios.min.js" integrity="sha512-lTLt+W7MrmDfKam+r3D2LURu0F47a3QaW5nF0c6Hl0JDZ57ruei+ovbg7BrZ+0bjVJ5YgzsAWE+RreERbpPE1g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="<?= assets('js/adminlte.min.js') ?>"></script>
+
+<script>
+
+    function confirm(id){
+
+        Swal.fire({
+            title: 'Silmek istediğinize emin misiniz?',
+            showDenyButton: true,
+            showCancelButton: false,
+            confirmButtonText: 'Emin eminim!',
+            denyButtonText: `Hayır, vazgeçtim.`,
+        }).then((result) => {
+
+            if (result.isConfirmed) {
+                removeProject(id)
+            } else if (result.isDenied) {
+                Swal.fire('Peki endişelenmeyin herşey yerinde duruyor :)', '', 'info')
+            }
+        })
+
+    }
+
+    function removeProject(id){
+        let project_id = id;
+
+        let formData = new FormData();
+        formData.append('project_id',project_id);
+
+        axios.post('<?= _link('proje/sil') ?>', formData)
+            .then(res => {
+                console.log(res)
+                if (res.data.removed){
+                    document.getElementById('row_'+ res.data.removed).remove();
+                }
+                Swal.fire(
+                    res.data.title,
+                    res.data.msg,
+                    res.data.status
+                )
+
+
+            })
+            .catch((err) => { console.log(err) })
+    }
+
+</script>
+
+
 </body>
 </html>

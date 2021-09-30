@@ -18,6 +18,7 @@
     ],
     "require": {
         "bramus/router": "~1.6",
-      "ext-json": "*"
+      "ext-json": "*",
+      "ext-pdo": "*"
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Model\ModelCustomer;
+use App\Model\ModelProject;
 use Core\BaseController;
 
 class Customer extends BaseController
@@ -43,6 +44,21 @@ class Customer extends BaseController
         $data['sidebar'] = $this->view->load('static/sidebar');
 
         echo $this->view->load('customer/edit', compact('data'));
+    }
+    public function Detail($id)
+    {
+        $ModelProject = new ModelProject();
+
+        $data['projects'] = $ModelProject->getProjectsByCustomerID($id);
+
+        $ModelCustomer = new ModelCustomer();
+        $data['customer'] = $ModelCustomer->getCustomer($id);
+
+
+        $data['navbar'] = $this->view->load('static/navbar');
+        $data['sidebar'] = $this->view->load('static/sidebar');
+
+        echo $this->view->load('customer/detail', compact('data'));
     }
 
     public function CreateCustomer(){

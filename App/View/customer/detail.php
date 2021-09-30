@@ -32,13 +32,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1 class="m-0">Müşteriler</h1>
+                        <h1 class="m-0"><?= $data['customer']['name'].' '.$data['customer']['surname'] ?></h1>
                     </div><!-- /.col -->
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="<?= _link('') ?>">Keşfet</a></li>
-                            <li class="breadcrumb-item"><a href="<?= _link('musteri') ?>">Müşteri</a></li>
-                            <li class="breadcrumb-item active">Ekle</li>
+                            <li class="breadcrumb-item"><a href="<?= _link('musteri') ?>">Müşteriler</a></li>
+                            <li class="breadcrumb-item active"><?= $data['customer']['name'].' '.$data['customer']['surname'] ?></li>
                         </ol>
                     </div><!-- /.col -->
                 </div><!-- /.row -->
@@ -48,43 +48,77 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
         <!-- Main content -->
         <div class="content">
-            <form id="customer">
-                <div class="card-body">
-                    <div class="form-group">
-                        <label for="customer_name">Müşteri Adı</label>
-                        <input type="text" class="form-control" id="customer_name">
-                    </div>
-                    <div class="form-group">
-                        <label for="customer_surname">Müşteri Soyadı</label>
-                        <input type="text" class="form-control" id="customer_surname">
-                    </div>
-                    <div class="form-group">
-                        <label for="customer_company">Firma Adı</label>
-                        <input type="text" class="form-control" id="customer_company">
-                    </div>
-                    <div class="form-group">
-                        <label for="customer_phone">Sabit Telefon</label>
-                        <input type="text" class="form-control" id="customer_phone">
-                    </div>
-                    <div class="form-group">
-                        <label for="customer_gsm">GSM</label>
-                        <input type="text" class="form-control" id="customer_gsm">
-                    </div>
-                    <div class="form-group">
-                        <label for="customer_email">E-Posta</label>
-                        <input type="text" class="form-control" id="customer_email">
-                    </div>
-                    <div class="form-group">
-                        <label for="customer_address">Adress</label>
-                        <textarea class="form-control" id="customer_address"></textarea>
-                    </div>
-                </div>
-                <!-- /.card-body -->
+           <div class="row">
+               <div class="col-md-4">
+                   <div class="card card-widget widget-user-2">
+                       <!-- Add the bg color to the header using any of the bg-* classes -->
+                       <div class="widget-user-header bg-warning">
+                           <!-- /.widget-user-image -->
+                           <h3 class="widget-user-username ml-2"><?= $data['customer']['name'].' '.$data['customer']['surname'] ?></h3>
+                           <h5 class="widget-user-desc ml-2"><?= $data['customer']['company'] ?></h5>
+                       </div>
+                       <div class="card-footer p-0">
+                           <ul class="nav flex-column">
+                               <li class="nav-item">
+                                   <a href="#" class="nav-link">
+                                       Projeler <span class="float-right badge bg-primary"><?= count($data['projects']); ?></span>
+                                   </a>
+                               </li>
+                               <li class="nav-item">
+                                   <a href="#" class="nav-link">
+                                       <?= $data['customer']['phone'] ?>
+                                   </a>
+                               </li>
+                               <li class="nav-item">
+                                   <a href="#" class="nav-link">
+                                       <?= $data['customer']['gsm'] ?>
+                                   </a>
+                               </li>
+                               <li class="nav-item">
+                                   <a href="#" class="nav-link">
+                                       <?= $data['customer']['email'] ?>
+                                   </a>
+                               </li>
+                           </ul>
+                       </div>
+                   </div>
+               </div>
 
-                <div class="card-footer">
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                </div>
-            </form>
+               <div class="col-md-8">
+                   <table class="table table-bordered">
+                       <thead>
+                       <tr>
+                           <th>Proje</th>
+                           <th>Durum</th>
+                           <th>İlerleyiş</th>
+                           <th style="width: 40px">Eylem</th>
+                       </tr>
+                       </thead>
+                       <tbody>
+                       <?php foreach ($data['projects'] as $key => $value): ?>
+                           <tr id="row_<?= $value['id'] ?>">
+                               <td><?= $value['title']; ?></td>
+                               <td><?= $value['status'] == 'a' ? 'Aktif' : 'Pasif'; ?></td>
+                               <td>
+                                   <?= $value['progress']; ?>%
+                                   <div class="progress progress-xs">
+                                       <div class="progress-bar progress-bar-danger" style="width: <?= $value['progress']; ?>%"></div>
+                                   </div>
+                               </td>
+                               <td>
+                                   <div class="btn-group btn-group-sm">
+                                       <button onclick="confirm('<?= $value['id'] ?>')" class="btn btn-sm btn-danger">Sil</button>
+                                       <a href="<?= _link('proje/guncelle/'.$value['id']) ?>" class="btn btn-sm btn-info">Güncelle</a>
+                                   </div>
+                               </td>
+                           </tr>
+                       <?php endforeach; ?>
+                       </tbody>
+                   </table>
+
+               </div>
+
+           </div>
         </div>
         <!-- /.content -->
     </div>
@@ -119,6 +153,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     const customer = document.getElementById('customer');
 
     customer.addEventListener('submit', (e) => {
+        let customer_id = document.getElementById('customer_id').value;
         let customer_name = document.getElementById('customer_name').value;
         let customer_surname = document.getElementById('customer_surname').value;
         let customer_company = document.getElementById('customer_company').value;
@@ -128,6 +163,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         let customer_address = document.getElementById('customer_address').value;
 
         let formData = new FormData();
+        formData.append('customer_id',customer_id);
         formData.append('customer_name',customer_name);
         formData.append('customer_surname',customer_surname);
         formData.append('customer_company',customer_company);
@@ -137,7 +173,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         formData.append('customer_address',customer_address);
 
 
-        axios.post('<?= _link('musteri/ekle') ?>', formData)
+        axios.post('<?= _link('musteri/guncelle') ?>', formData)
             .then(res => {
                 console.log(res)
                 if (res.data.redirect){

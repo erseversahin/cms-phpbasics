@@ -10,7 +10,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <title>AdminLTE 3 | Starter</title>
 
     <!-- Google Font: Source Sans Pro -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="<?= assets('plugins/fontawesome-free/css/all.min.css') ?>">
     <!-- Theme style -->
@@ -32,12 +33,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1 class="m-0">Müşteriler</h1>
+                        <h1 class="m-0">Proje Ekle</h1>
                     </div><!-- /.col -->
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="<?= _link('') ?>">Keşfet</a></li>
-                            <li class="breadcrumb-item"><a href="<?= _link('musteri') ?>">Müşteri</a></li>
+                            <li class="breadcrumb-item"><a href="<?= _link('proje') ?>">Projeler</a></li>
                             <li class="breadcrumb-item active">Ekle</li>
                         </ol>
                     </div><!-- /.col -->
@@ -48,41 +49,50 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
         <!-- Main content -->
         <div class="content">
-            <form id="customer">
+            <form id="project">
                 <div class="card-body">
                     <div class="form-group">
-                        <label for="customer_name">Müşteri Adı</label>
-                        <input type="text" class="form-control" id="customer_name">
+                        <label for="customer_id">Müşteri Seçiniz</label>
+                        <select id="customer_id" class="form-control">
+                            <option value="">- Müşteri Seçiniz -</option>
+                            <?php foreach ($data['customers'] as $key => $value): ?>
+                                <option value="<?= $value['id'] ?>"><?= $value['name'] . ' ' . $value['surname'] ?></option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
                     <div class="form-group">
-                        <label for="customer_surname">Müşteri Soyadı</label>
-                        <input type="text" class="form-control" id="customer_surname">
+                        <label for="title">Proje Başlığı</label>
+                        <input type="text" class="form-control" id="title">
                     </div>
                     <div class="form-group">
-                        <label for="customer_company">Firma Adı</label>
-                        <input type="text" class="form-control" id="customer_company">
+                        <label for="description">Proje Detayları</label>
+                        <textarea class="form-control" id="description"></textarea>
                     </div>
                     <div class="form-group">
-                        <label for="customer_phone">Sabit Telefon</label>
-                        <input type="text" class="form-control" id="customer_phone">
+                        <label for="start_date">Başlangıç Tarihi</label>
+                        <input type="date" class="form-control" id="start_date">
                     </div>
                     <div class="form-group">
-                        <label for="customer_gsm">GSM</label>
-                        <input type="text" class="form-control" id="customer_gsm">
+                        <label for="end_date">Bitiş Tarihi</label>
+                        <input type="date" class="form-control" id="end_date">
                     </div>
                     <div class="form-group">
-                        <label for="customer_email">E-Posta</label>
-                        <input type="text" class="form-control" id="customer_email">
+                        <label for="progress">İlerleyiş</label>
+                        <input type="range" min="0" max="100" class="form-control" id="progress">
                     </div>
                     <div class="form-group">
-                        <label for="customer_address">Adress</label>
-                        <textarea class="form-control" id="customer_address"></textarea>
+                        <label for="status">Proje Durum</label>
+                        <select id="status" class="form-control">
+                            <option value="a">Aktif</option>
+                            <option value="p">Pasif</option>
+                        </select>
                     </div>
+
                 </div>
                 <!-- /.card-body -->
 
                 <div class="card-footer">
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="submit" class="btn btn-primary">Ekle</button>
                 </div>
             </form>
         </div>
@@ -111,36 +121,38 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script src="<?= assets('plugins/bootstrap/js/bootstrap.bundle.min.js') ?>"></script>
 <!-- AdminLTE App -->
 <script src="<?= assets('plugins/sweetalert2/sweetalert2.all.js') ?>"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.4/axios.min.js" integrity="sha512-lTLt+W7MrmDfKam+r3D2LURu0F47a3QaW5nF0c6Hl0JDZ57ruei+ovbg7BrZ+0bjVJ5YgzsAWE+RreERbpPE1g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.4/axios.min.js"
+        integrity="sha512-lTLt+W7MrmDfKam+r3D2LURu0F47a3QaW5nF0c6Hl0JDZ57ruei+ovbg7BrZ+0bjVJ5YgzsAWE+RreERbpPE1g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="<?= assets('js/adminlte.min.js') ?>"></script>
 
 <script>
 
-    const customer = document.getElementById('customer');
+    const project = document.getElementById('project');
 
-    customer.addEventListener('submit', (e) => {
-        let customer_name = document.getElementById('customer_name').value;
-        let customer_surname = document.getElementById('customer_surname').value;
-        let customer_company = document.getElementById('customer_company').value;
-        let customer_phone = document.getElementById('customer_phone').value;
-        let customer_gsm = document.getElementById('customer_gsm').value;
-        let customer_email = document.getElementById('customer_email').value;
-        let customer_address = document.getElementById('customer_address').value;
+    project.addEventListener('submit', (e) => {
+        let customer_id = document.getElementById('customer_id').value;
+        let title = document.getElementById('title').value;
+        let description = document.getElementById('description').value;
+        let start_date = document.getElementById('start_date').value;
+        let end_date = document.getElementById('end_date').value;
+        let progress = document.getElementById('progress').value;
+        let status = document.getElementById('status').value;
 
         let formData = new FormData();
-        formData.append('customer_name',customer_name);
-        formData.append('customer_surname',customer_surname);
-        formData.append('customer_company',customer_company);
-        formData.append('customer_phone',customer_phone);
-        formData.append('customer_gsm',customer_gsm);
-        formData.append('customer_email',customer_email);
-        formData.append('customer_address',customer_address);
+        formData.append('customer_id', customer_id);
+        formData.append('title', title);
+        formData.append('description', description);
+        formData.append('start_date', start_date);
+        formData.append('end_date', end_date);
+        formData.append('progress', progress);
+        formData.append('status', status);
 
 
-        axios.post('<?= _link('musteri/ekle') ?>', formData)
+        axios.post('<?= _link('proje/ekle') ?>', formData)
             .then(res => {
                 console.log(res)
-                if (res.data.redirect){
+                if (res.data.redirect) {
                     window.location.href = res.data.redirect;
                 }
                 Swal.fire(
@@ -151,7 +163,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 
             })
-            .catch((err) => { console.log(err) })
+            .catch((err) => {
+                console.log(err)
+            })
 
 
         e.preventDefault();
