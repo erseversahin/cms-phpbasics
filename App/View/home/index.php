@@ -49,7 +49,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <div class="row">
                     <div class="col-md-4 col-sm-6 col-12">
                         <div class="info-box">
-                            <span class="info-box-icon bg-info"><i class="far fa-envelope"></i></span>
+                            <span class="info-box-icon bg-info"><i class="fa fa-users"></i></span>
 
                             <div class="info-box-content">
                                 <span class="info-box-text">Toplam Müşteri</span>
@@ -75,7 +75,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <!-- /.col -->
                     <div class="col-md-4 col-sm-6 col-12">
                         <div class="info-box">
-                            <span class="info-box-icon bg-warning"><i class="far fa-copy"></i></span>
+                            <span class="info-box-icon bg-warning"><i class="fa fa-user-astronaut"></i></span>
 
                             <div class="info-box-content">
                                 <span class="info-box-text">Sistem Kullanıcısı</span>
