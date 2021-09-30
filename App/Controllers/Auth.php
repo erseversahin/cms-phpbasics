@@ -48,7 +48,7 @@ class Auth extends BaseController
         }else{
             $status = 'error';
             $title = 'Ops! Dikkat';
-            $msg = 'Beklenmedik bir hata meydana geldi. Lüfen sayfanızı yenileyerek tekrar deneyin.';
+            $msg = 'Kullanıcı adınız veya şifreniz hatalı lütfen tekrar deneyiniz.';
             echo json_encode(['status' => $status, 'title' => $title, 'msg' => $msg]);
             exit();
         }

@@ -31,12 +31,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1 class="m-0">Anasayfa</h1>
+                        <h1 class="m-0">Keşfet</h1>
                     </div><!-- /.col -->
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="#">Home</a></li>
-                            <li class="breadcrumb-item active">Starter Page</li>
+                            <li class="breadcrumb-item"><a href="#">Keşfet</a></li>
                         </ol>
                     </div><!-- /.col -->
                 </div><!-- /.row -->
@@ -48,7 +47,126 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <div class="content">
             <div class="container-fluid">
                 <div class="row">
+                    <div class="col-md-4 col-sm-6 col-12">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-info"><i class="far fa-envelope"></i></span>
 
+                            <div class="info-box-content">
+                                <span class="info-box-text">Toplam Müşteri</span>
+                                <span class="info-box-number"><?= $data['totals']['total_customer'] ?? 0 ?></span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-md-4 col-sm-6 col-12">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-success"><i class="far fa-flag"></i></span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">Toplam Proje</span>
+                                <span class="info-box-number"><?= $data['totals']['total_project'] ?? 0 ?></span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-md-4 col-sm-6 col-12">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-warning"><i class="far fa-copy"></i></span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">Sistem Kullanıcısı</span>
+                                <span class="info-box-number"><?= $data['totals']['system_users'] ?? 0 ?></span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </div>
+                    <!-- /.col -->
+                    <!-- /.col -->
+                </div>
+                <div class="row">
+                    <?php foreach ($data['projects'] as $project): ?>
+
+                        <div class="col-lg-6 col-6">
+                            <!-- small card -->
+                            <div class="small-box bg-<?= $project['status'] == 'a' ? 'success' : 'danger'; ?>">
+                                <div class="inner">
+                                    <h3><?= $project['total']; ?></h3>
+
+                                    <p><?= $project['status'] == 'a' ? 'Devam Eden Projeler' : 'Tamamlanmış Projeler'; ?></p>
+                                </div>
+                                <div class="icon">
+                                    <i class="fas fa-<?= $project['status'] == 'a' ? 'check' : 'plus'; ?>"></i>
+                                </div>
+                                <a href="<?= _link('proje') ?>" class="small-box-footer">
+                                    Tüm Projeler <i class="fas fa-arrow-circle-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th>Proje</th>
+                                <th>Müşteri</th>
+                                <th>Durum</th>
+                                <th>İlerleyiş</th>
+                                <th style="width: 40px">Eylem</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <?php foreach ($data['projects_table'] as $key => $value): ?>
+                                <tr id="row_<?= $value['id'] ?>">
+                                    <td><?= $value['title']; ?></td>
+                                    <td><?= $value['customer_name'] ? '<a href="'._link('musteri/detay/'.$value['customer_id']).'">'.$value['customer_name'].'</a>' : null; ?></td>
+                                    <td><?= $value['status'] == 'a' ? 'Aktif' : 'Pasif'; ?></td>
+                                    <td>
+                                        <?= $value['progress']; ?>%
+                                        <div class="progress progress-xs">
+                                            <div class="progress-bar progress-bar-danger" style="width: <?= $value['progress']; ?>%"></div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="btn-group btn-group-md">
+                                            <a href="<?= _link('proje/guncelle/'.$value['id']) ?>" class="btn btn-md btn-info"><i class="fa fa-eye"></i></a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-md-6">
+                        <table class="table table-striped table-bordered">
+                            <thead>
+                            <tr>
+                                <th>Müşteriler</th>
+                                <th style="width: 40px">Eylem</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <?php foreach ($data['customers_table'] as $key => $value): ?>
+                                <tr id="row_<?= $value['id'] ?>">
+                                    <td><?= $value['name']. ' '. $value['surname'] ?></td>
+
+                                    <td>
+                                        <div class="btn-group btn-group-md">
+                                            <a href="<?= _link('musteri/guncelle/'.$value['id']) ?>" class="btn btn-md btn-warning"><i class="fa fa-pen"></i></a>
+                                            <a href="<?= _link('musteri/detay/'.$value['id']) ?>" class="btn btn-md btn-info"><i class="fa fa-eye"></i></a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
                 <!-- /.row -->
             </div><!-- /.container-fluid -->

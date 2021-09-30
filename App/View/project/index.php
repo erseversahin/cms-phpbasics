@@ -51,6 +51,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <thead>
                 <tr>
                     <th>Proje</th>
+                    <th>Müşteri</th>
                     <th>Durum</th>
                     <th>İlerleyiş</th>
                     <th style="width: 40px">Eylem</th>
@@ -60,6 +61,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <?php foreach ($data['projects'] as $key => $value): ?>
                 <tr id="row_<?= $value['id'] ?>">
                     <td><?= $value['title']; ?></td>
+                    <td><?= $value['customer_name'] ? '<a href="'._link('musteri/detay/'.$value['customer_id']).'">'.$value['customer_name'].'</a>' : null; ?></td>
                     <td><?= $value['status'] == 'a' ? 'Aktif' : 'Pasif'; ?></td>
                     <td>
                         <?= $value['progress']; ?>%

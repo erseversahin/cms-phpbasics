@@ -46,7 +46,14 @@ class ModelProject extends BaseModel
 
     public function getProjects(){
 
-        return $this->db->query('SELECT * FROM projects', true);
+        return $this->db->query('SELECT projects.*, customer_id, CONCAT(c.name," ", c.surname) as customer_name FROM projects  LEFT JOIN customers c on c.id = projects.customer_id', true);
+
+    }
+    public function getProjectsByStatus($status = 'a'){
+
+        return $this->db->query("SELECT projects.*, customer_id, CONCAT(c.name,' ', c.surname) as customer_name FROM projects  
+                                    LEFT JOIN customers c on c.id = projects.customer_id 
+                                    WHERE projects.status = '$status' ", true);
 
     }
     public function getProjectsByCustomerID($id){

@@ -21,6 +21,7 @@ class ModelAuth extends BaseModel
             Session::setSession('name',$user['name']);
             Session::setSession('surname',$user['surname']);
             Session::setSession('email',$user['email']);
+            Session::setSession('id',$user['id']);
             Session::setSession('password',$user['password']);
             return true;
         }else{
